@@ -1,0 +1,62 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="Under-the-same-moon"
+run/main_scene="res://main.tscn"
+config/features=PackedStringArray("4.6", "Forward Plus")
+config/icon="res://icon.svg"
+
+[input]
+
+move_forward={
+"deadzone": 0.5,
+"events": [{
+"keycode": 87.0,
+"type": "InputEventKey"
+}]
+}
+move_back={
+"deadzone": 0.5,
+"events": [{
+"keycode": 83.0,
+"type": "InputEventKey"
+}]
+}
+move_left={
+"deadzone": 0.5,
+"events": [{
+"keycode": 65.0,
+"type": "InputEventKey"
+}]
+}
+move_right={
+"deadzone": 0.5,
+"events": [{
+"keycode": 68.0,
+"type": "InputEventKey"
+}]
+}
+run={
+"deadzone": 0.5,
+"events": [{
+"keycode": 16777237.0,
+"type": "InputEventKey"
+}]
+}
+
+[physics]
+
+3d/physics_engine="Jolt Physics"
+
+[rendering]
+
+rendering_device/driver.windows="d3d12"

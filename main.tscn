@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://bssjmwiyen8dj"]
+
+[ext_resource type="Script" uid="uid://ie45ft7s1mtb" path="res://scripts/village_start.gd" id="1_ig7tw"]
+
+[node name="Main" type="Node2D" unique_id=1163981340]
+script = ExtResource("1_ig7tw")
+
+[node name="VillageStart" type="Node3D" parent="." unique_id=207748498]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=862009769]
+
+[node name="MoonLight" type="DirectionalLight3D" parent="." unique_id=1991543810]
+transform = Transform3D(0.8660254, 0.35355338, -0.35355338, 0, 0.70710677, 0.70710677, 0.5, -0.6123724, 0.6123724, 0, 0, 0)
+light_color = Color(0.73, 0.8, 0.95, 1)
+light_energy = 0.6
+shadow_enabled = true
