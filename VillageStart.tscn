@@ -1,0 +1,103 @@
+[gd_scene format=3 uid="uid://d1go5yoq5l283"]
+
+[sub_resource type="Environment" id="Environment_village"]
+background_mode = 2
+background_color = Color(0.106, 0.122, 0.231, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.227, 0.353, 0.478, 1)
+ambient_light_energy = 0.35
+fog_enabled = true
+fog_light_color = Color(0.416, 0.365, 0.561, 1)
+fog_density = 0.02
+fog_aerial_perspective = 0.55
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ground"]
+shading_mode = 0
+albedo_color = Color(0.227, 0.353, 0.478, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ground"]
+size = Vector2(120, 120)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nfjye"]
+size = Vector3(120, 0.2, 120)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_moon"]
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0.949, 0.945, 0.929, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_moon"]
+size = Vector2(12, 12)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_house"]
+shading_mode = 0
+albedo_color = Color(0.478, 0.478, 0.478, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_house"]
+size = Vector3(2, 2, 2)
+
+[node name="VillageStart" type="Node3D" unique_id=375291143]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1799680842]
+environment = SubResource("Environment_village")
+
+[node name="MoonLight" type="DirectionalLight3D" parent="." unique_id=117214236]
+transform = Transform3D(0.8658247, -0.32156664, 0.38333073, 0, 0.7661291, 0.6426867, -0.50034744, -0.55645406, 0.6633335, 0, 0, 0)
+light_color = Color(0.227, 0.353, 0.478, 1)
+light_energy = 0.7
+shadow_enabled = true
+
+[node name="Ground" type="MeshInstance3D" parent="." unique_id=535499771]
+material_override = SubResource("StandardMaterial3D_ground")
+mesh = SubResource("PlaneMesh_ground")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Ground" unique_id=1694602190]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/StaticBody3D" unique_id=172948856]
+shape = SubResource("BoxShape3D_nfjye")
+
+[node name="LanternLight" type="OmniLight3D" parent="." unique_id=2003109879]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 2.2, -2.2)
+light_color = Color(0.416, 0.365, 0.561, 1)
+light_energy = 1.2
+omni_range = 6.0
+
+[node name="Moon" type="MeshInstance3D" parent="." unique_id=1815666527]
+transform = Transform3D(0.9393727, 0, 0.3428978, 0, 1, 0, -0.3428978, 0, 0.9393727, -28, 34, -70)
+material_override = SubResource("StandardMaterial3D_moon")
+mesh = SubResource("QuadMesh_moon")
+
+[node name="House01" type="MeshInstance3D" parent="." unique_id=1841467846]
+transform = Transform3D(0.9887711, 0, 0.14943814, 0, 1, 0, -0.14943814, 0, 0.9887711, -8, 1, -6)
+material_override = SubResource("StandardMaterial3D_house")
+mesh = SubResource("BoxMesh_house")
+
+[node name="House02" type="MeshInstance3D" parent="." unique_id=2002606492]
+transform = Transform3D(1.0734872, 0, -0.21822962, 0, 0.95, 0, 0.2400526, 0, 0.97589743, -4, 0.9, -8)
+material_override = SubResource("StandardMaterial3D_house")
+mesh = SubResource("BoxMesh_house")
+
+[node name="House03" type="MeshInstance3D" parent="." unique_id=444369800]
+transform = Transform3D(0.94696164, 0, 0.07991468, 0, 1.1, 0, -0.07591895, 0, 0.99680173, 0, 1.1, -5)
+material_override = SubResource("StandardMaterial3D_house")
+mesh = SubResource("BoxMesh_house")
+
+[node name="House04" type="MeshInstance3D" parent="." unique_id=1224703765]
+transform = Transform3D(0.95233357, 0, -0.32031152, 0, 0.9, 0, 0.3050586, 0, 0.99995023, 4.5, 0.85, -7.5)
+material_override = SubResource("StandardMaterial3D_house")
+mesh = SubResource("BoxMesh_house")
+
+[node name="House05" type="MeshInstance3D" parent="." unique_id=90591111]
+transform = Transform3D(1.159668, 0, 0.24422655, 0, 1, 0, -0.3084967, 0, 0.91807044, 8.5, 1.05, -5.8)
+material_override = SubResource("StandardMaterial3D_house")
+mesh = SubResource("BoxMesh_house")
+
+[node name="House06" type="MeshInstance3D" parent="." unique_id=417180625]
+transform = Transform3D(0.89352775, 0, -0.10774098, 0, 0.9, 0, 0.10774098, 0, 0.89352775, 1.8, 0.8, -10.2)
+material_override = SubResource("StandardMaterial3D_house")
+mesh = SubResource("BoxMesh_house")
+
+[node name="StartCamera" type="Camera3D" parent="." unique_id=755236114]
+transform = Transform3D(1, 0, 0, 0, 0.9393727, 0.3428978, 0, -0.3428978, 0.9393727, 0, 7, 14)
+current = true
+fov = 65.0

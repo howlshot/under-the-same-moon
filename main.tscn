@@ -1,16 +1,183 @@
 [gd_scene format=3 uid="uid://bssjmwiyen8dj"]
 
 [ext_resource type="Script" uid="uid://ie45ft7s1mtb" path="res://scripts/village_start.gd" id="1_ig7tw"]
+[ext_resource type="Script" uid="uid://drxy6jqpd7wi4" path="res://scripts/player.gd" id="2_1bvp3"]
+[ext_resource type="Script" uid="uid://cl3uh1w7r6isw" path="res://scripts/camera_rig.gd" id="3_lquwl"]
+[ext_resource type="Script" uid="uid://dktq2ds2n3vkj" path="res://scripts/cat_follower.gd" id="4_7mycd"]
 
-[node name="Main" type="Node2D" unique_id=1163981340]
+[sub_resource type="Sky" id="Sky_1bvp3"]
+
+[sub_resource type="Environment" id="Environment_lquwl"]
+background_mode = 2
+background_color = Color(0.106, 0.122, 0.231, 1)
+sky = SubResource("Sky_1bvp3")
+ambient_light_source = 2
+ambient_light_color = Color(0.227, 0.353, 0.478, 1)
+ambient_light_energy = 0.4
+tonemap_mode = 1
+fog_enabled = true
+fog_light_color = Color(0.416, 0.365, 0.561, 1)
+fog_light_energy = 1.2
+fog_density = 0.018
+fog_aerial_perspective = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_272bh"]
+albedo_color = Color(0.227, 0.353, 0.478, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_5vw27"]
+size = Vector2(80, 80)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kek77"]
+size = Vector3(80, 0.1, 80)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4c57u"]
+radius = 0.35
+height = 1.8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_efxa6"]
+albedo_color = Color(0.416, 0.365, 0.561, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_dg77c"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1bvp3"]
+shading_mode = 0
+albedo_color = Color(0.47, 0.36, 0.55, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_lquwl"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_1bvp3"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ycdy4"]
+radius = 0.15
+height = 0.4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w48qg"]
+albedo_color = Color(0.949, 0.945, 0.929, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_vivmo"]
+size = Vector3(0.25, 0.25, 0.45)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7mycd"]
+shading_mode = 0
+albedo_color = Color(0.95, 0.94, 0.93, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_272bh"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_lquwl"]
+
+[node name="VillageStart" type="Node3D" unique_id=2118491392]
 script = ExtResource("1_ig7tw")
 
-[node name="VillageStart" type="Node3D" parent="." unique_id=207748498]
-
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=862009769]
+environment = SubResource("Environment_lquwl")
 
 [node name="MoonLight" type="DirectionalLight3D" parent="." unique_id=1991543810]
-transform = Transform3D(0.8660254, 0.35355338, -0.35355338, 0, 0.70710677, 0.70710677, 0.5, -0.6123724, 0.6123724, 0, 0, 0)
-light_color = Color(0.73, 0.8, 0.95, 1)
-light_energy = 0.6
+transform = Transform3D(0.8658247, -0.3215666, 0.3833307, 0, 0.766129, 0.64268667, -0.50034744, -0.556454, 0.6633334, 0, 0, 0)
+light_color = Color(0.78, 0.85, 1, 1)
+light_energy = 0.7
 shadow_enabled = true
+shadow_opacity = 0.85
+
+[node name="Ground" type="MeshInstance3D" parent="." unique_id=1461561106]
+material_override = SubResource("StandardMaterial3D_272bh")
+mesh = SubResource("PlaneMesh_5vw27")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Ground" unique_id=2011721083]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/StaticBody3D" unique_id=880414512]
+shape = SubResource("BoxShape3D_kek77")
+
+[node name="Player" type="CharacterBody3D" parent="." unique_id=1646455432]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("2_1bvp3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player" unique_id=1878909327]
+shape = SubResource("CapsuleShape3D_4c57u")
+
+[node name="MeshPivot" type="Node3D" parent="Player" unique_id=201056558]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="Body" type="MeshInstance3D" parent="Player/MeshPivot" unique_id=1234580568]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+material_override = SubResource("StandardMaterial3D_efxa6")
+mesh = SubResource("CapsuleMesh_dg77c")
+
+[node name="BodyMesh" type="MeshInstance3D" parent="Player/MeshPivot" unique_id=1003468833]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+material_override = SubResource("StandardMaterial3D_1bvp3")
+mesh = SubResource("CapsuleMesh_lquwl")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player/MeshPivot" unique_id=1842640985]
+mesh = SubResource("CapsuleMesh_1bvp3")
+
+[node name="CameraRig" type="Node3D" parent="." unique_id=152024920]
+script = ExtResource("3_lquwl")
+
+[node name="HPivot" type="Node3D" parent="CameraRig" unique_id=2010689887]
+
+[node name="VPivot" type="Node3D" parent="CameraRig/HPivot" unique_id=992158233]
+
+[node name="SpringArm3D" type="SpringArm3D" parent="CameraRig/HPivot/VPivot" unique_id=1362295789]
+spring_length = 6.0
+margin = 0.3
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig/HPivot/VPivot/SpringArm3D" unique_id=336828278]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6)
+fov = 65.0
+
+[node name="Camera3D_1" type="Camera3D" parent="CameraRig/HPivot/VPivot/SpringArm3D" unique_id=1598884195]
+
+[node name="Camera3D_2" type="Camera3D" parent="CameraRig/HPivot/VPivot/SpringArm3D" unique_id=606906285]
+
+[node name="Camera3D_3" type="Camera3D" parent="CameraRig/HPivot/VPivot/SpringArm3D" unique_id=217575771]
+
+[node name="Camera3D_4" type="Camera3D" parent="CameraRig/HPivot/VPivot/SpringArm3D" unique_id=802454087]
+
+[node name="Camera3D_5" type="Camera3D" parent="CameraRig/HPivot/VPivot/SpringArm3D" unique_id=182054192]
+
+[node name="SpringArm3D_1" type="SpringArm3D" parent="CameraRig/HPivot/VPivot" unique_id=1269922017]
+
+[node name="SpringArm3D_2" type="SpringArm3D" parent="CameraRig/HPivot/VPivot" unique_id=1800676818]
+
+[node name="SpringArm3D_3" type="SpringArm3D" parent="CameraRig/HPivot/VPivot" unique_id=1095076199]
+
+[node name="SpringArm3D_4" type="SpringArm3D" parent="CameraRig/HPivot/VPivot" unique_id=1661017788]
+
+[node name="SpringArm3D_5" type="SpringArm3D" parent="CameraRig/HPivot/VPivot" unique_id=493840747]
+
+[node name="VPivot_1" type="Node3D" parent="CameraRig/HPivot" unique_id=1557802402]
+
+[node name="VPivot_2" type="Node3D" parent="CameraRig/HPivot" unique_id=1227503198]
+
+[node name="VPivot_3" type="Node3D" parent="CameraRig/HPivot" unique_id=1166567930]
+
+[node name="VPivot_4" type="Node3D" parent="CameraRig/HPivot" unique_id=934658658]
+
+[node name="VPivot_5" type="Node3D" parent="CameraRig/HPivot" unique_id=347046000]
+
+[node name="Cat" type="CharacterBody3D" parent="." unique_id=1969453393]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+collision_layer = 4
+collision_mask = 1
+script = ExtResource("4_7mycd")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Cat" unique_id=1435747278]
+shape = SubResource("CapsuleShape3D_ycdy4")
+
+[node name="MeshPivot" type="Node3D" parent="Cat" unique_id=823219366]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+
+[node name="Body" type="MeshInstance3D" parent="Cat/MeshPivot" unique_id=398188792]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+material_override = SubResource("StandardMaterial3D_w48qg")
+mesh = SubResource("BoxMesh_vivmo")
+
+[node name="CatMesh" type="MeshInstance3D" parent="Cat/MeshPivot" unique_id=114786404]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+material_override = SubResource("StandardMaterial3D_7mycd")
+mesh = SubResource("SphereMesh_272bh")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Cat/MeshPivot" unique_id=1850333119]
+mesh = SubResource("BoxMesh_lquwl")

@@ -1,0 +1,194 @@
+[gd_scene format=3 uid="uid://fepldypdee1w"]
+
+[ext_resource type="Script" uid="uid://ie45ft7s1mtb" path="res://scripts/village_start.gd" id="1"]
+[ext_resource type="Script" uid="uid://drxy6jqpd7wi4" path="res://scripts/player.gd" id="2"]
+[ext_resource type="Script" uid="uid://cl3uh1w7r6isw" path="res://scripts/camera_rig.gd" id="3"]
+[ext_resource type="Script" uid="uid://dktq2ds2n3vkj" path="res://scripts/cat_follower.gd" id="4"]
+
+[sub_resource type="Environment" id="Environment_village"]
+background_mode = 2
+background_color = Color(0.106, 0.122, 0.231, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.227, 0.353, 0.478, 1)
+ambient_light_energy = 0.35
+fog_enabled = true
+fog_light_color = Color(0.416, 0.365, 0.561, 1)
+fog_density = 0.02
+fog_aerial_perspective = 0.55
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ground"]
+shading_mode = 0
+albedo_color = Color(0.227, 0.353, 0.478, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ground"]
+size = Vector2(120, 120)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ground"]
+size = Vector3(120, 0.2, 120)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_moon"]
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0.949, 0.945, 0.929, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_moon"]
+size = Vector2(12, 12)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_house"]
+shading_mode = 0
+albedo_color = Color(0.478, 0.478, 0.478, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_house"]
+size = Vector3(2, 2, 2)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_player"]
+radius = 0.35
+height = 1.8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_player_body"]
+albedo_color = Color(0.416, 0.365, 0.561, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_player_body"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_player_body_2"]
+shading_mode = 0
+albedo_color = Color(0.47, 0.36, 0.55, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_player_body_2"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_cat"]
+radius = 0.15
+height = 0.4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cat_body"]
+albedo_color = Color(0.949, 0.945, 0.929, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_cat_body"]
+size = Vector3(0.25, 0.25, 0.45)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cat_head"]
+shading_mode = 0
+albedo_color = Color(0.949, 0.945, 0.929, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_cat_head"]
+
+[node name="VillageStart" type="Node3D" unique_id=75284541]
+script = ExtResource("1")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1667609744]
+environment = SubResource("Environment_village")
+
+[node name="MoonLight" type="DirectionalLight3D" parent="." unique_id=479348950]
+transform = Transform3D(0.8658247, -0.32156664, 0.38333073, 0, 0.7661291, 0.6426867, -0.50034744, -0.55645406, 0.6633335, 0, 0, 0)
+light_color = Color(0.227, 0.353, 0.478, 1)
+light_energy = 0.7
+shadow_enabled = true
+
+[node name="Ground" type="MeshInstance3D" parent="." unique_id=725604600]
+material_override = SubResource("StandardMaterial3D_ground")
+mesh = SubResource("PlaneMesh_ground")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Ground" unique_id=1956808483]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/StaticBody3D" unique_id=142163268]
+shape = SubResource("BoxShape3D_ground")
+
+[node name="LanternLight" type="OmniLight3D" parent="." unique_id=972333043]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 2.2, -2.2)
+light_color = Color(0.416, 0.365, 0.561, 1)
+light_energy = 1.2
+omni_range = 6.0
+
+[node name="Moon" type="MeshInstance3D" parent="." unique_id=1520566166]
+transform = Transform3D(0.9393727, 0, 0.3428978, 0, 1, 0, -0.3428978, 0, 0.9393727, -28, 34, -70)
+material_override = SubResource("StandardMaterial3D_moon")
+mesh = SubResource("QuadMesh_moon")
+
+[node name="House01" type="MeshInstance3D" parent="." unique_id=1424591662]
+transform = Transform3D(2.1752963, 0, 0.2988763, 0, 2, 0, -0.32876393, 0, 1.9775422, -18, 2, -16)
+material_override = SubResource("StandardMaterial3D_house")
+mesh = SubResource("BoxMesh_house")
+
+[node name="House02" type="MeshInstance3D" parent="." unique_id=1875526280]
+transform = Transform3D(2.342154, 0, -0.4801052, 0, 2.1, 0, 0.52375114, 0, 2.1469743, -7, 2.1, -19)
+material_override = SubResource("StandardMaterial3D_house")
+mesh = SubResource("BoxMesh_house")
+
+[node name="House03" type="MeshInstance3D" parent="." unique_id=1932810016]
+transform = Transform3D(1.9936035, 0, 0.15982936, 0, 2.3, 0, -0.15982936, 0, 1.9936035, 9, 2.3, -16.5)
+material_override = SubResource("StandardMaterial3D_house")
+mesh = SubResource("BoxMesh_house")
+
+[node name="House04" type="MeshInstance3D" parent="." unique_id=1169310208]
+transform = Transform3D(2.1903672, 0, -0.64062303, 0, 1.9, 0, 0.70163476, 0, 1.9999005, 20, 1.9, -18)
+material_override = SubResource("StandardMaterial3D_house")
+mesh = SubResource("BoxMesh_house")
+
+[node name="House05" type="MeshInstance3D" parent="." unique_id=1775635423]
+transform = Transform3D(2.4159749, 0, 0.5655774, 0, 2.2, 0, -0.6427015, 0, 2.1260579, -14, 2.2, -30)
+material_override = SubResource("StandardMaterial3D_house")
+mesh = SubResource("BoxMesh_house")
+
+[node name="House06" type="MeshInstance3D" parent="." unique_id=1881835058]
+transform = Transform3D(1.8863364, 0, -0.22745317, 0, 1.8, 0, 0.22745317, 0, 1.8863364, 14, 1.8, -31)
+material_override = SubResource("StandardMaterial3D_house")
+mesh = SubResource("BoxMesh_house")
+
+[node name="Player" type="CharacterBody3D" parent="." unique_id=2098786641]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 8)
+collision_layer = 2
+script = ExtResource("2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player" unique_id=1290725846]
+shape = SubResource("CapsuleShape3D_player")
+
+[node name="MeshPivot" type="Node3D" parent="Player" unique_id=723204410]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="Body" type="MeshInstance3D" parent="Player/MeshPivot" unique_id=459464769]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+material_override = SubResource("StandardMaterial3D_player_body")
+mesh = SubResource("CapsuleMesh_player_body")
+
+[node name="BodyMesh" type="MeshInstance3D" parent="Player/MeshPivot" unique_id=1678680896]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+material_override = SubResource("StandardMaterial3D_player_body_2")
+mesh = SubResource("CapsuleMesh_player_body_2")
+
+[node name="CameraRig" type="Node3D" parent="." unique_id=871113757]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8)
+script = ExtResource("3")
+
+[node name="HPivot" type="Node3D" parent="CameraRig" unique_id=667747351]
+
+[node name="VPivot" type="Node3D" parent="CameraRig/HPivot" unique_id=437415716]
+
+[node name="SpringArm3D" type="SpringArm3D" parent="CameraRig/HPivot/VPivot" unique_id=116792551]
+spring_length = 6.0
+margin = 0.3
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig/HPivot/VPivot/SpringArm3D" unique_id=1956616269]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6)
+current = true
+fov = 65.0
+
+[node name="Cat" type="CharacterBody3D" parent="." unique_id=983468399]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 10.5)
+collision_layer = 4
+script = ExtResource("4")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Cat" unique_id=823205805]
+shape = SubResource("CapsuleShape3D_cat")
+
+[node name="MeshPivot" type="Node3D" parent="Cat" unique_id=1270849734]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+
+[node name="Body" type="MeshInstance3D" parent="Cat/MeshPivot" unique_id=24376744]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+material_override = SubResource("StandardMaterial3D_cat_body")
+mesh = SubResource("BoxMesh_cat_body")
+
+[node name="CatMesh" type="MeshInstance3D" parent="Cat/MeshPivot" unique_id=399131832]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+material_override = SubResource("StandardMaterial3D_cat_head")
+mesh = SubResource("SphereMesh_cat_head")
