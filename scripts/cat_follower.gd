@@ -42,9 +42,15 @@ extends CharacterBody3D
 @export var unstuck_teleport_distance: float = 2.8
 @export var unstuck_ground_probe_up: float = 3.0
 @export var unstuck_ground_probe_down: float = 6.0
+@export var interact_radius: float = 2.2
+@export var interact_cooldown: float = 1.5
+@export var purr_enabled: bool = true
+@export var purr_delay: float = 0.7
 
 @onready var mesh_pivot: Node3D = $MeshPivot
 @onready var cat_collision: CollisionShape3D = get_node_or_null("CollisionShape3D")
+@onready var meow_sfx: AudioStreamPlayer3D = get_node_or_null("MeowSfx")
+@onready var purr_sfx: AudioStreamPlayer3D = get_node_or_null("PurrSfx")
 
 var _target: Node3D = null
 var _jump_cooldown_left := 0.0
@@ -52,12 +58,18 @@ var _last_move_dir := Vector3.FORWARD
 var _last_follow_dir := Vector3.FORWARD
 var _is_chasing := true
 var _stuck_time := 0.0
+var _interact_was_pressed := false
+var _interact_cooldown_left := 0.0
+var _pending_purr_left := -1.0
+var _meow_runtime: AudioStreamPlayer3D
+var _purr_runtime: AudioStreamPlayer3D
 
 func _ready() -> void:
 	# Stick to gentle slopes/ramps to reduce seam snagging and false "stuck" states.
 	floor_snap_length = floor_snap_len
 	if cat_collision and abs(cat_collision.position.y) < 0.001:
 		cat_collision.position.y = cat_collision_y_offset
+	_init_runtime_audio()
 
 func set_target(node: Node3D) -> void:
 	_target = node
@@ -76,9 +88,19 @@ func set_target(node: Node3D) -> void:
 
 func _physics_process(delta: float) -> void:
 	_jump_cooldown_left = max(0.0, _jump_cooldown_left - delta)
+	_interact_cooldown_left = max(0.0, _interact_cooldown_left - delta)
+	if _pending_purr_left >= 0.0:
+		_pending_purr_left = max(-1.0, _pending_purr_left - delta)
+		if _pending_purr_left == -1.0 and purr_enabled:
+			if purr_sfx:
+				purr_sfx.play()
+			elif _purr_runtime:
+				_play_runtime_tone(_purr_runtime, 180.0, 0.9, 0.12)
 
 	if _target == null:
 		return
+
+	_process_cat_interaction()
 
 	# Gravity
 	if not is_on_floor():
@@ -291,3 +313,61 @@ func _get_target_follow_direction(target_speed: float) -> Vector3:
 		dir = _last_follow_dir
 	_last_follow_dir = dir.normalized()
 	return _last_follow_dir
+
+func _process_cat_interaction() -> void:
+	var interact_pressed := Input.is_key_pressed(KEY_E)
+	var interact_just_pressed := interact_pressed and not _interact_was_pressed
+	_interact_was_pressed = interact_pressed
+	if not interact_just_pressed or _interact_cooldown_left > 0.0:
+		return
+	if _target == null:
+		return
+	if global_position.distance_to(_target.global_position) > interact_radius:
+		return
+	if meow_sfx:
+		meow_sfx.play()
+	elif _meow_runtime:
+		_play_runtime_tone(_meow_runtime, 650.0, 0.12, 0.25)
+	if purr_enabled:
+		_pending_purr_left = purr_delay
+	_interact_cooldown_left = interact_cooldown
+
+func _init_runtime_audio() -> void:
+	_meow_runtime = AudioStreamPlayer3D.new()
+	_meow_runtime.name = "MeowRuntime"
+	_meow_runtime.max_distance = 18.0
+	_meow_runtime.volume_db = -8.0
+	add_child(_meow_runtime)
+	var meow_stream := AudioStreamGenerator.new()
+	meow_stream.mix_rate = 44100.0
+	meow_stream.buffer_length = 0.2
+	_meow_runtime.stream = meow_stream
+
+	_purr_runtime = AudioStreamPlayer3D.new()
+	_purr_runtime.name = "PurrRuntime"
+	_purr_runtime.max_distance = 16.0
+	_purr_runtime.volume_db = -12.0
+	add_child(_purr_runtime)
+	var purr_stream := AudioStreamGenerator.new()
+	purr_stream.mix_rate = 44100.0
+	purr_stream.buffer_length = 0.3
+	_purr_runtime.stream = purr_stream
+
+func _play_runtime_tone(player: AudioStreamPlayer3D, frequency: float, length_seconds: float, amplitude: float) -> void:
+	if player.stream == null:
+		return
+	if not player.playing:
+		player.play()
+	var playback := player.get_stream_playback()
+	if playback == null or not (playback is AudioStreamGeneratorPlayback):
+		return
+	var generator := player.stream as AudioStreamGenerator
+	var frames := int(generator.mix_rate * length_seconds)
+	var phase := 0.0
+	var phase_inc := TAU * frequency / generator.mix_rate
+	for i in range(frames):
+		var t := float(i) / float(max(frames, 1))
+		var env := 1.0 - t
+		var sample := sin(phase) * amplitude * env
+		(playback as AudioStreamGeneratorPlayback).push_frame(Vector2(sample, sample))
+		phase += phase_inc

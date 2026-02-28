@@ -1,37 +1,55 @@
 extends Area3D
 
-@export var message: String = "Press E to talk"
-@export var npc_line: String = "The mountain watches over us."
+@export_multiline var lines: Array[String] = [
+	"The mountain watches over us."
+]
+@export var line_duration: float = 2.5
+@export var cooldown_seconds: float = 10.0
 
 @onready var prompt: Label3D = get_node_or_null("../Prompt")
 
 var _player_in_range := false
-var _interact_was_pressed := false
+var _cooldown_left := 0.0
+var _line_hide_left := 0.0
 
 func _ready() -> void:
+	randomize()
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
 	if prompt:
 		prompt.visible = false
-		prompt.text = message
 
-func _physics_process(_delta: float) -> void:
-	var interact_pressed := Input.is_key_pressed(KEY_E)
-	var interact_just_pressed := interact_pressed and not _interact_was_pressed
-	_interact_was_pressed = interact_pressed
-	if _player_in_range and interact_just_pressed:
-		print("[NPC] %s" % npc_line)
+func _physics_process(delta: float) -> void:
+	if _cooldown_left > 0.0:
+		_cooldown_left = max(0.0, _cooldown_left - delta)
+	if _line_hide_left > 0.0:
+		_line_hide_left = max(0.0, _line_hide_left - delta)
+		if _line_hide_left == 0.0 and prompt:
+			prompt.visible = false
 
 func _on_body_entered(body: Node) -> void:
 	if body.name != "Player":
 		return
 	_player_in_range = true
-	if prompt:
-		prompt.visible = true
+	_try_speak()
 
 func _on_body_exited(body: Node) -> void:
 	if body.name != "Player":
 		return
 	_player_in_range = false
-	if prompt:
+	if prompt and _line_hide_left <= 0.0:
 		prompt.visible = false
+
+func _try_speak() -> void:
+	if not _player_in_range:
+		return
+	if _cooldown_left > 0.0:
+		return
+	if lines.is_empty():
+		return
+	var line := lines[randi() % lines.size()]
+	if prompt:
+		prompt.text = line
+		prompt.visible = true
+	_line_hide_left = line_duration
+	_cooldown_left = cooldown_seconds

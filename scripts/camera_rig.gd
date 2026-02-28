@@ -25,6 +25,16 @@ func set_target(node: Node3D) -> void:
 	if _target:
 		global_position = _target.global_position
 
+func set_opening_composition(look_target: Vector3) -> void:
+	if _target == null:
+		return
+	var to_target := look_target - _target.global_position
+	to_target.y = 0.0
+	if to_target.length_squared() > 0.0001:
+		_yaw = rad_to_deg(atan2(to_target.x, to_target.z)) + 180.0
+	global_position = _target.global_position + Vector3(0, height_offset, 0)
+	_apply_orbit()
+
 func _ready() -> void:
 	spring_arm.spring_length = arm_length
 	spring_arm.margin = 0.3
